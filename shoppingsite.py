@@ -60,20 +60,13 @@ def show_melon(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
-    # TODO: Display the contents of the shopping cart.
-
-    # The logic here will be something like:
-    #
-    # - get the cart dictionary from the session
     order_total = 0
 
     # - create a list to hold melon objects and a variable to hold the total
-# 
     melon_cart = []
-    #cost of the order
+    
 
     cart = session.get("cart", {})
-
 
     # - loop over the cart dictionary, and for each melon id:
 #    - get the corresponding Melon object
@@ -88,10 +81,11 @@ def show_shopping_cart():
     #    - add quantity and total cost as attributes on the Melon object
         melon.quantity = quantity
         melon.total_cost = total_cost
+        
     #    - add the Melon object to the list created above
         melon_cart.append(melon)
+        
     # - pass the total order cost and the list of Melon objects to the template
-    #
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
@@ -112,13 +106,21 @@ def add_to_cart(melon_id):
     # The logic here should be something like:
     #
     # - check if a "cart" exists in the session, and create one (an empty
-    #   dictionary keyed to the string "cart") if not
+    #   dictionary keyed to the string "cart") 
+    if "cart" in session:
+        cart = session["cart"]
+    else:
+        cart = session["cart"] = {}
+
     # - check if the desired melon id is the cart, and if not, put it in
     # - increment the count for that melon id by 1
+    cart[melon_id] = cart.get(melon_id, 0) + 1
+
     # - flash a success message
     # - redirect the user to the cart page
+    flash("Congratulations! Your melon was added successfully!")
 
-    return "Oops! This needs to be implemented!"
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])
